@@ -1,2 +1,2 @@
-# Node-Editor
- pygame visual scripting
+# Node Editor
+Pygame Visual Scripter
