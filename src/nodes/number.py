@@ -1,5 +1,5 @@
 import pygame as pg
-from node import Node
+from src.node import Node
 
 
 class NumberNode(Node):

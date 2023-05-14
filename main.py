@@ -1,6 +1,6 @@
 import pygame as pg
-from const import *
-from editor import NodeEditor
+from src.const import *
+from src.editor import NodeEditor
 
 
 pg.init()
