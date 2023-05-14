@@ -1,5 +1,5 @@
 import pygame as pg
-from const import *
+from src.const import *
 
 
 class Node:

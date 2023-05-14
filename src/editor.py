@@ -1,6 +1,6 @@
 import pygame as pg
-from nodes.add import AddNode
-from nodes.number import NumberNode
+from src.nodes.add import AddNode
+from src.nodes.number import NumberNode
 
 
 class NodeEditor:
