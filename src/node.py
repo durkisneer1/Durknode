@@ -31,7 +31,10 @@ class Node:
         self.pos.x = min(max(self.pos.x, 0), WIN_WIDTH - self.size.x)
         self.pos.y = min(max(self.pos.y, self.bar_offset.y), WIN_HEIGHT - self.size.y)
 
-    def update(self, events: pg.event.get, mouse_pos: pg.Vector2):
+    def manage_events(self, event: pg.Event):
+        pass
+
+    def update(self, mouse_pos: pg.Vector2):
         if self.dragging and self.selected:
             self.pos.xy = mouse_pos + self.mouse_offset
             self.bound()
