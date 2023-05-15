@@ -27,7 +27,7 @@ class NodeEditor:
 
             if ev.type == pg.MOUSEBUTTONDOWN and ev.button == 1:
 
-                sorted_overlapping_nodes = sorted([node for node in self.nodes if node.rect.collidepoint(ev.pos)], key=lambda node: node.z, reverse=True)
+                sorted_overlapping_nodes = sorted([node for node in self.nodes if node.rect.collidepoint(ev.pos)], key=lambda node: node.layer, reverse=True)
 
                 if sorted_overlapping_nodes:
                 
@@ -39,12 +39,12 @@ class NodeEditor:
 
                     # Put everything that's on top of the selected node one layer down -> the selected ends up on top
 
-                    selected_node.z = self.nodes[-1].z + 1
+                    selected_node.layer = self.nodes[-1].layer + 1
 
                     index = self.nodes.index(selected_node)
-                    [n.__setattr__("z", max(1, n.z - 1)) for n in self.nodes[index:]]
+                    [n.__setattr__("z", max(1, n.layer - 1)) for n in self.nodes[index:]]
 
-                    self.nodes = sorted(self.nodes, key = lambda x: x.z)
+                    self.nodes = sorted(self.nodes, key = lambda n: n.layer)
 
             elif ev.type == pg.MOUSEBUTTONUP and ev.button == 1:
                 [n.__setattr__("selected", False) for n in self.nodes]
@@ -53,8 +53,7 @@ class NodeEditor:
         for node in self.nodes:
             node.update(events, mouse_pos)
 
-                
-        print([node.z for node in self.nodes])
+        # print([node.layer for node in self.nodes])
 
     def draw(self, screen):
         for node in self.nodes:
