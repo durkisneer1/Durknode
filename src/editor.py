@@ -2,8 +2,9 @@ import pygame as pg
 from src.nodes.add import AddNode
 from src.nodes.number import NumberNode
 
-CANVASX = 0
-CANVASY = 0
+
+# CANVASX = 0
+# CANVASY = 0
 class NodeEditor:
     def __init__(self, font):
         self.nodes = []
@@ -60,7 +61,7 @@ class NodeEditor:
 
         for node in self.nodes:
             node.update(events, mouse_pos)
-            
+
         # print([node.layer for node in self.nodes])
 
     def draw(self, screen):
