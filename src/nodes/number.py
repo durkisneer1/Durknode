@@ -11,7 +11,9 @@ class NumberNode(Node):
 
     def render_text(self):
         self.output_text = self.font.render("".join(self.value), True, "black")
-        self.rect.width = max(self.size.x, self.output_text.get_width() + self.output_offset.x * 2)
+        self.rect.width = max(
+            self.size.x, self.output_text.get_width() + self.output_offset.x * 2
+        )
 
     def append_digit(self, event):
         if event.text.isdigit() or event.text == ".":

@@ -3,7 +3,9 @@ from src.const import *
 
 
 class Node:
-    def __init__(self, pos: pg.Vector2, size: tuple, label: str, font: pg.font.Font, layer: int):
+    def __init__(
+        self, pos: pg.Vector2, size: tuple, label: str, font: pg.font.Font, layer: int
+    ):
         self.pos = pg.Vector2(pos)
         self.size = pg.Vector2(size)
         self.rect = pg.Rect(pos, size)
