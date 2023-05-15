@@ -42,7 +42,7 @@ class NodeEditor:
                     selected_node.layer = self.nodes[-1].layer + 1
 
                     index = self.nodes.index(selected_node)
-                    [n.__setattr__("z", max(1, n.layer - 1)) for n in self.nodes[index:]]
+                    [n.__setattr__("layer", max(1, n.layer - 1)) for n in self.nodes[index:]]
 
                     self.nodes = sorted(self.nodes, key = lambda n: n.layer)
 
@@ -53,7 +53,7 @@ class NodeEditor:
         for node in self.nodes:
             node.update(events, mouse_pos)
 
-        # print([node.layer for node in self.nodes])
+        print([node.layer for node in self.nodes])
 
     def draw(self, screen):
         for node in self.nodes:
