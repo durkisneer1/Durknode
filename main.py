@@ -20,16 +20,16 @@ def main() -> None:
     while True:
         keys = pg.key.get_pressed()
         mouse_vec.xy = pg.mouse.get_pos()
-        events = pg.event.get()
 
-        for ev in events:
-            if ev.type == pg.QUIT or (ev.type == pg.KEYDOWN and ev.key == pg.K_ESCAPE):
+        for event in pg.event.get():
+            editor.manage_events(event, mouse_vec, keys)
+            if event.type == pg.QUIT:
                 pg.quit()
                 return
 
         screen.fill((60, 60, 60))
 
-        editor.update(events, mouse_vec, keys)
+        editor.update(mouse_vec)
         editor.draw(screen)
 
         screen.blit(add_key_text, (10, 10))

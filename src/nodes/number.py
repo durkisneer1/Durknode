@@ -17,7 +17,7 @@ class NumberNode(Node):
         )
         self.bar_rect.width = self.node_rect.width
 
-    def append_digit(self, event):
+    def append_digit(self, event: pg.Event):
         if event.text.isdigit() or event.text == ".":
             self.value.append(event.text)
             if len(self.value) > 1 and self.value[0] == "0" and "." not in self.value:
@@ -31,14 +31,12 @@ class NumberNode(Node):
             self.value.append("0")
         self.render_text()
 
-    def update(self, events: pg.event.get, mouse_pos: pg.Vector2):
-        super().update(events, mouse_pos)
+    def manage_events(self, event: pg.Event):
         if self.selected:
-            for ev in events:
-                if ev.type == pg.TEXTINPUT:
-                    self.append_digit(ev)
-                elif ev.type == pg.KEYDOWN and ev.key == pg.K_BACKSPACE:
-                    self.pop_digit()
+            if event.type == pg.TEXTINPUT:
+                self.append_digit(event)
+            elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
+                self.pop_digit()
 
     def draw(self, screen: pg.Surface):
         super().draw(screen)
