@@ -3,8 +3,8 @@ from src.node import Node
 
 
 class NumberNode(Node):
-    def __init__(self, pos: pg.Vector2, font: pg.font.Font):
-        super().__init__(pos, (100, 60), "Number", font)
+    def __init__(self, pos: pg.Vector2, font: pg.font.Font, layer: int):
+        super().__init__(pos, (100, 60), "Number", font, layer)
         self.font = font
         self.value = ["0"]
         self.output_text = self.font.render("0", True, "black")
@@ -12,7 +12,9 @@ class NumberNode(Node):
 
     def render_text(self):
         self.output_text = self.font.render("".join(self.value), True, "black")
-        self.rect.width = max(self.size.x, self.output_text.get_width() + self.output_offset.x * 2)
+        self.rect.width = max(
+            self.size.x, self.output_text.get_width() + self.output_offset.x * 2
+        )
 
     def append_digit(self, event):
         if event.text.isdigit() or event.text == ".":
