@@ -3,7 +3,7 @@ from src.const import *
 
 
 class Node:
-    def __init__(self, pos: pg.Vector2, size: tuple, label: str, font: pg.font.Font):
+    def __init__(self, pos: pg.Vector2, size: tuple, label: str, font: pg.font.Font, layer: int):
         self.pos = pg.Vector2(pos)
         self.size = pg.Vector2(size)
         self.rect = pg.Rect(pos, size)
@@ -14,6 +14,8 @@ class Node:
         self.dragging = False
         self.selected = False
         self.mouse_offset = pg.Vector2(0, 0)
+
+        self.layer = layer
 
     def set_mouse_offset(self, mouse_pos: pg.Vector2):
         self.mouse_offset = self.pos - mouse_pos
