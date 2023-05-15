@@ -3,18 +3,19 @@ from src.node import Node
 
 
 class NumberNode(Node):
-    def __init__(self, pos: pg.Vector2, font: pg.font.Font, layer: int):
-        super().__init__(pos, (100, 60), "Number", font, layer)
+    def __init__(self, pos: pg.Vector2, font: pg.Font, layer: int):
+        super().__init__(pos, (100, 40), "Number", font, layer)
         self.font = font
         self.value = ["0"]
-        self.output_text = self.font.render("0", True, "black")
-        self.output_offset = pg.Vector2(10, 35)
+        self.output_text = self.font.render("0", True, "snow")
+        self.output_offset = pg.Vector2(10, 10)
 
     def render_text(self):
-        self.output_text = self.font.render("".join(self.value), True, "black")
-        self.rect.width = max(
+        self.output_text = self.font.render("".join(self.value), True, "snow")
+        self.node_rect.width = max(
             self.size.x, self.output_text.get_width() + self.output_offset.x * 2
         )
+        self.bar_rect.width = self.node_rect.width
 
     def append_digit(self, event):
         if event.text.isdigit() or event.text == ".":
