@@ -59,6 +59,15 @@ class NodeEditor:
 
                 self.nodes = sorted(self.nodes, key=lambda n: n.layer)
 
+                if (selected_node.node_rect.left - event.pos[0])**2  + (selected_node.node_rect.centery - event.pos[1])**2 <= selected_node.in_out_radius ** 2:
+                    print("in")
+                    
+                elif (selected_node.node_rect.right - event.pos[0])**2  + (selected_node.node_rect.centery - event.pos[1])**2 <= selected_node.in_out_radius ** 2:
+
+                    print("out")
+
+
+
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
             for n in self.nodes:
                 n.dragging = False

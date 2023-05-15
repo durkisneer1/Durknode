@@ -20,7 +20,11 @@ class Node:
 
         self.dragging = False
         self.selected = False
+        self.hovered = False
         self.mouse_offset = pg.Vector2(0, 0)
+        self.in_out_radius = 10
+        self.hover_rect = self.node_rect.inflate( 2 * self.in_out_radius, 0)
+        
 
         self.layer = layer
 
@@ -41,10 +45,18 @@ class Node:
             self.node_rect.topleft = self.pos
             self.bar_rect.topleft = self.pos - self.bar_offset
 
+            self.hover_rect.center = self.node_rect.center
+
         self.border_color = "yellow" if self.selected else "black"
+        self.hovered  = self.hover_rect.collidepoint(mouse_pos) 
 
     def draw(self, screen: pg.Surface):
         pg.draw.rect(screen, (20, 20, 20), self.node_rect)
         pg.draw.rect(screen, (30, 30, 30), self.bar_rect)
         pg.draw.rect(screen, self.border_color, self.node_rect, 1)
         screen.blit(self.text, self.pos + self.text_offset)
+
+        if self.hovered:
+            pg.draw.circle(screen, "red", self.node_rect.midleft, self.in_out_radius)
+            pg.draw.circle(screen, "red", self.node_rect.midright, self.in_out_radius)
+
