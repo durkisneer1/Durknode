@@ -21,6 +21,7 @@ def main() -> None:
         keys = pg.key.get_pressed()
         mouse_vec.xy = pg.mouse.get_pos()
         events = pg.event.get()
+
         for ev in events:
             if ev.type == pg.QUIT or (ev.type == pg.KEYDOWN and ev.key == pg.K_ESCAPE):
                 pg.quit()

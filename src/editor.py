@@ -31,7 +31,12 @@ class NodeEditor:
 
             if ev.type == pg.MOUSEBUTTONDOWN and ev.button == 1:
                 sorted_overlapping_nodes = sorted(
-                    [node for node in self.nodes if node.rect.collidepoint(ev.pos)],
+                    [
+                        node
+                        for node in self.nodes
+                        if node.bar_rect.collidepoint(ev.pos)
+                        or node.node_rect.collidepoint(ev.pos)
+                    ],
                     key=lambda node: node.layer,
                     reverse=True,
                 )
@@ -64,5 +69,4 @@ class NodeEditor:
             node.update(events, mouse_pos)
 
     def draw(self, screen):
-        for node in self.nodes:
-            node.draw(screen)
+        [node.draw(screen) for node in self.nodes]
