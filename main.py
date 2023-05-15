@@ -12,6 +12,7 @@ editor = NodeEditor(font)
 
 add_key_text = font.render("Shift + A: Add Node", True, "snow")
 number_key_text = font.render("Shift + N: Number Node", True, "snow")
+delete_key_text = font.render("Selected + X: Delete Node", True, "snow")
 
 
 def main() -> None:
@@ -32,6 +33,7 @@ def main() -> None:
 
         screen.blit(add_key_text, (10, 10))
         screen.blit(number_key_text, (10, 30))
+        screen.blit(delete_key_text, (10, 50))
 
         pg.display.flip()
 

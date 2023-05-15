@@ -11,4 +11,3 @@ class AddNode(Node):
 
     def draw(self, screen: pg.Surface):
         super().draw(screen)
-
