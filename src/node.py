@@ -12,15 +12,11 @@ class Node:
         self.bar = 20
         self.bar_pos = pg.Vector2((pos[0],pos[1]-self.bar))
         self.bar_rect = pg.Rect(self.bar_pos, (size[0],20))
-        # 30 can be changed
-        
         self.bar_font = pg.font.Font(None,22)
-        #font.size = 14
         self.font_colour = "#DDDDDD"
         self.node_bg = "#111111"
         self.bar_bg = "#222222"
         self.text = self.bar_font.render(label, True, self.font_colour)
-
         # self.text_offset = pg.Vector2(x,y=0-self.bar_height - (self.bar_height - self.bar_font_height)/2)
         self.text_offset = pg.Vector2(5, 0 - (self.bar-2.5))
         self.border_color = "black"
