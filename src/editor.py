@@ -3,6 +3,8 @@ from src.nodes.add import AddNode
 from src.nodes.number import NumberNode
 
 
+
+
 class NodeEditor:
     def __init__(self, font):
         self.nodes = []
@@ -19,23 +21,40 @@ class NodeEditor:
                 elif keys[pg.K_LSHIFT]:
                     match ev.key:
                         case pg.K_a:
-                            self.nodes.append(AddNode(mouse_pos, self.font))
+                            self.nodes.append(AddNode(mouse_pos, self.font, len(self.nodes) + 1))
                         case pg.K_n:
-                            self.nodes.append(NumberNode(mouse_pos, self.font))
+                            self.nodes.append(NumberNode(mouse_pos, self.font, len(self.nodes) + 1))
 
-        for node in reversed(self.nodes):
+            if ev.type == pg.MOUSEBUTTONDOWN and ev.button == 1:
+
+                sorted_overlapping_nodes = sorted([node for node in self.nodes if node.rect.collidepoint(ev.pos)], key=lambda node: node.z, reverse=True)
+
+                if sorted_overlapping_nodes:
+                
+                    selected_node = sorted_overlapping_nodes[0] 
+
+                    selected_node.set_mouse_offset(ev.pos)
+                    selected_node.dragging = True
+                    selected_node.selected = True
+
+                    # Put everything that's on top of the selected node one layer down -> the selected ends up on top
+
+                    selected_node.z = self.nodes[-1].z + 1
+
+                    index = self.nodes.index(selected_node)
+                    [n.__setattr__("z", max(1, n.z - 1)) for n in self.nodes[index:]]
+
+                    self.nodes = sorted(self.nodes, key = lambda x: x.z)
+
+            elif ev.type == pg.MOUSEBUTTONUP and ev.button == 1:
+                [n.__setattr__("selected", False) for n in self.nodes]
+                [n.__setattr__("dragging", False) for n in self.nodes]
+
+        for node in self.nodes:
             node.update(events, mouse_pos)
-            for ev in events:
-                if ev.type == pg.MOUSEBUTTONDOWN and ev.button == 1:
-                    if node.rect.collidepoint(ev.pos):
-                        node.set_mouse_offset(ev.pos)
-                        node.dragging = True
-                        [n.__setattr__("selected", False) for n in self.nodes]
-                        node.selected = True
-                        break
-                elif ev.type == pg.MOUSEBUTTONUP and ev.button == 1:
-                    node.dragging = False
-                    break
+
+                
+        print([node.z for node in self.nodes])
 
     def draw(self, screen):
         for node in self.nodes:
