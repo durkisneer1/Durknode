@@ -6,9 +6,10 @@ from src.nodes.number import NumberNode
 # CANVASX = 0
 # CANVASY = 0
 class NodeEditor:
-    def __init__(self, font: pg.Font):
+    def __init__(self, title_font: pg.Font, body_font: pg.Font):
         self.nodes = []
-        self.font = font
+        self.title_font = title_font
+        self.body_font = body_font
         self.dragging_node = None
 
     def manage_events(self, event: pg.Event, mouse_pos: pg.Vector2, keys: pg.key.get_pressed):
@@ -21,11 +22,11 @@ class NodeEditor:
                 match event.key:
                     case pg.K_a:
                         self.nodes.append(
-                            AddNode(mouse_pos, self.font, len(self.nodes) + 1)
+                            AddNode(mouse_pos, self.title_font, len(self.nodes) + 1)
                         )
                     case pg.K_n:
                         self.nodes.append(
-                            NumberNode(mouse_pos, self.font, len(self.nodes) + 1)
+                            NumberNode(mouse_pos, self.title_font, self.body_font, len(self.nodes) + 1)
                         )
 
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -57,7 +58,7 @@ class NodeEditor:
                 for node in self.nodes[index:]:
                     node.layer = max(1, node.layer - 1)
 
-                self.nodes = sorted(self.nodes, key=lambda n: n.layer)
+                self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
             for n in self.nodes:

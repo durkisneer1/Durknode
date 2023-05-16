@@ -3,9 +3,9 @@ from src.node import Node
 
 
 class NumberNode(Node):
-    def __init__(self, pos: pg.Vector2, font: pg.Font, layer: int):
-        super().__init__(pos, (100, 40), "Number", font, layer)
-        self.font = font
+    def __init__(self, pos: pg.Vector2, title_font: pg.Font, body_font: pg.Font, layer: int):
+        super().__init__(pos, (100, 40), "Number", title_font, layer)
+        self.font = body_font
         self.value = ["0"]
         self.output_text = self.font.render("0", True, "snow")
         self.output_offset = pg.Vector2(10, 10)

@@ -4,7 +4,7 @@ from src.const import *
 
 class Node:
     def __init__(
-        self, pos: pg.Vector2, size: tuple, label: str, font: pg.Font, layer: int
+        self, pos: pg.Vector2, size: tuple, label: str, title_font: pg.Font, layer: int
     ):
         self.pos = pg.Vector2(pos)
         self.size = pg.Vector2(size)
@@ -15,7 +15,7 @@ class Node:
         self.bar_pos = pos - self.bar_offset
         self.bar_rect = pg.Rect(self.bar_pos, (size[0], self.bar_offset.y))
 
-        self.text = font.render(label, True, "snow")
+        self.text = title_font.render(label, True, "snow")
         self.text_offset = pg.Vector2(5, -(self.bar_offset.y - 2.5))
 
         self.dragging = False
