@@ -63,7 +63,7 @@ class NodeEditor:
                     print("in")
                     
                 elif (selected_node.node_rect.right - event.pos[0])**2  + (selected_node.node_rect.centery - event.pos[1])**2 <= selected_node.in_out_radius ** 2:
-
+                    selected_node.make_connection = True
                     print("out")
 
 

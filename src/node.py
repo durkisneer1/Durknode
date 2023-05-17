@@ -24,6 +24,10 @@ class Node:
         self.mouse_offset = pg.Vector2(0, 0)
         self.in_out_radius = 10
         self.hover_rect = self.node_rect.inflate( 2 * self.in_out_radius, 0)
+
+
+        self.input_connection = None
+        self.output_connection = None
         
 
         self.layer = layer
@@ -49,6 +53,10 @@ class Node:
 
         self.border_color = "yellow" if self.selected else "black"
         self.hovered  = self.hover_rect.collidepoint(mouse_pos) 
+
+        if self.make_connection:
+
+            pg.draw.line(self.node_rect.midright)
 
     def draw(self, screen: pg.Surface):
         pg.draw.rect(screen, (20, 20, 20), self.node_rect)
