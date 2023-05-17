@@ -12,6 +12,10 @@ class NodeEditor:
         self.body_font = body_font
         self.dragging_node = None
 
+        self.receive_linking = False
+
+        self.link_sending_node = None
+
     def manage_events(self, event: pg.Event, mouse_pos: pg.Vector2, keys: pg.key.get_pressed):
         [node.manage_events(event) for node in self.nodes if node.selected]
 
@@ -45,6 +49,7 @@ class NodeEditor:
                 selected_node = sorted_overlapping_nodes[0]
 
                 selected_node.set_mouse_offset(event.pos)
+
                 selected_node.dragging = True
                 for node in self.nodes:
                     node.selected = False
@@ -60,13 +65,21 @@ class NodeEditor:
 
                 self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
-                if (selected_node.node_rect.left - event.pos[0])**2  + (selected_node.node_rect.centery - event.pos[1])**2 <= selected_node.in_out_radius ** 2:
-                    print("in")
-                    
-                elif (selected_node.node_rect.right - event.pos[0])**2  + (selected_node.node_rect.centery - event.pos[1])**2 <= selected_node.in_out_radius ** 2:
-                    selected_node.make_connection = True
-                    print("out")
+                for node in sorted_overlapping_nodes:
 
+                    if (node.node_rect.left - event.pos[0])**2  + (node.node_rect.centery - event.pos[1])**2 <= node.in_out_radius ** 2 and self.link_sending_node is not None and node != self.link_sending_node:
+
+                        self.link_sending_node.output_connection = node
+                        node.input_connection = self.link_sending_node
+
+                        self.link_sending_node.make_connection = False
+                        self.link_sending_node.has_connection = True
+                        
+                    elif (node.node_rect.right - event.pos[0])**2  + (node.node_rect.centery - event.pos[1])**2 <= node.in_out_radius ** 2:
+
+                        selected_node.make_connection = True
+
+                        self.link_sending_node = selected_node
 
 
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:

@@ -1,5 +1,33 @@
 import pygame as pg
+import numpy as np
 from src.const import *
+
+
+t = np.linspace(0, 1)
+
+t = t[:, np.newaxis]
+
+inverse_t = 1 - t
+inverse_t2 = inverse_t ** 2 
+t2 = t ** 2
+
+
+def calculate_bezier_points(start: tuple, control_1: tuple, control_2: tuple, end: tuple, t: np.ndarray[float], inverse_t: np.ndarray[float], inverse_t2: np.ndarray[float], t2: np.ndarray[float]) -> list[list]:
+
+    start = np.array(start)
+    control_1 = np.array(control_1)
+    control_2 = np.array(control_2)
+    end = np.array(end)
+
+    points = (
+        start * inverse_t2 * inverse_t +
+        3 * control_1 * inverse_t2 * t +
+        3 * control_2 * inverse_t * t2 +
+        end * t2 * t 
+    )
+
+    return points.tolist()
+
 
 
 class Node:
@@ -22,9 +50,11 @@ class Node:
         self.selected = False
         self.hovered = False
         self.mouse_offset = pg.Vector2(0, 0)
-        self.in_out_radius = 10
-        self.hover_rect = self.node_rect.inflate( 2 * self.in_out_radius, 0)
+        self.in_out_radius = 5
+        self.hover_rect = self.node_rect.inflate(4 * self.in_out_radius, 0)
 
+        self.make_connection = False
+        self.has_connection = False
 
         self.input_connection = None
         self.output_connection = None
@@ -54,11 +84,42 @@ class Node:
         self.border_color = "yellow" if self.selected else "black"
         self.hovered  = self.hover_rect.collidepoint(mouse_pos) 
 
-        if self.make_connection:
+        if self.make_connection and self.selected:
+            
+            if not self.node_rect.collidepoint(mouse_pos.xy):
 
-            pg.draw.line(self.node_rect.midright)
+                self.calculate_wire(mouse_pos.x, mouse_pos.y)
+
+            else:
+                
+                self.wire_points = [self.node_rect.midright, self.node_rect.midright]
+
+        if self.has_connection:
+
+            self.calculate_wire(self.output_connection.node_rect.left, self.output_connection.node_rect.centery)
+
+
+    def calculate_wire(self, end_point_x: int, end_point_y: int):
+
+
+        dx = (end_point_x - self.node_rect.right) // 2
+        dy = (end_point_y - self.node_rect.centery) // 2
+
+        if end_point_x <= self.node_rect.right:
+
+            control_1 = (end_point_x + dx, end_point_y - dy)
+            control_2 = (self.node_rect.right - dx, self.node_rect.centery + dy)
+
+        else:
+
+            control_1 = (end_point_x - abs(dx), end_point_y + dy)
+            control_2 = (self.node_rect.right + abs(dx), self.node_rect.centery - dy)
+
+        self.wire_points = calculate_bezier_points((end_point_x, end_point_y), control_1, control_2, self.node_rect.midright, t, inverse_t, inverse_t2, t2)
+
 
     def draw(self, screen: pg.Surface):
+
         pg.draw.rect(screen, (20, 20, 20), self.node_rect)
         pg.draw.rect(screen, (30, 30, 30), self.bar_rect)
         pg.draw.rect(screen, self.border_color, self.node_rect, 1)
@@ -67,4 +128,11 @@ class Node:
         if self.hovered:
             pg.draw.circle(screen, "red", self.node_rect.midleft, self.in_out_radius)
             pg.draw.circle(screen, "red", self.node_rect.midright, self.in_out_radius)
+
+        if (self.make_connection and self.selected) or self.has_connection:
+
+            pg.draw.aalines(screen, "lightgrey", False, self.wire_points)
+
+
+
 
