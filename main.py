@@ -6,13 +6,19 @@ from src.editor import NodeEditor
 pg.init()
 screen = pg.display.set_mode(WIN_SIZE)
 pg.display.set_caption("Node Editor")
-font = pg.font.SysFont("Calibri", 20, True, False)
+cat_img = pg.transform.scale(
+    pg.image.load("assets/cat.png").convert(),
+    WIN_SIZE
+)
 
-editor = NodeEditor(font)
+node_body_font = pg.font.SysFont("Calibri", 20, True, False)
+node_title_font = pg.font.SysFont("Calibri", 15, True, False)
 
-add_key_text = font.render("Shift + A: Add Node", True, "snow")
-number_key_text = font.render("Shift + N: Number Node", True, "snow")
-delete_key_text = font.render("Selected + X: Delete Node", True, "snow")
+editor = NodeEditor(node_title_font, node_body_font)
+
+add_key_text = node_body_font.render("Shift + A: Add Node", True, "snow")
+number_key_text = node_body_font.render("Shift + N: Number Node", True, "snow")
+delete_key_text = node_body_font.render("Selected + X: Delete Node", True, "snow")
 
 
 def main() -> None:
@@ -27,7 +33,7 @@ def main() -> None:
                 pg.quit()
                 return
 
-        screen.fill((60, 60, 60))
+        screen.blit(cat_img, (0, 0))
 
         editor.update(mouse_vec)
         editor.draw(screen)

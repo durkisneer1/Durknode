@@ -3,9 +3,9 @@ from src.node import Node
 
 
 class NumberNode(Node):
-    def __init__(self, pos: pg.Vector2, font: pg.Font, layer: int):
-        super().__init__(pos, (100, 40), "Number", font, layer)
-        self.font = font
+    def __init__(self, pos: pg.Vector2, title_font: pg.Font, body_font: pg.Font, layer: int):
+        super().__init__(pos, (100, 40), "Number", title_font, layer)
+        self.font = body_font
         self.value = ["0"]
         self.output_text = self.font.render("0", True, "snow")
         self.output_offset = pg.Vector2(10, 10)
@@ -33,7 +33,7 @@ class NumberNode(Node):
 
     def manage_events(self, event: pg.Event):
         if self.selected:
-            if event.type == pg.TEXTINPUT:
+            if event.type == pg.TEXTINPUT and len(self.value) < 20:
                 self.append_digit(event)
             elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
                 self.pop_digit()

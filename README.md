@@ -1,2 +1,2 @@
-# Node Editor
+# Durknode
 Pygame Visual Scripter
