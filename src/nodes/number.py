@@ -33,7 +33,7 @@ class NumberNode(Node):
 
     def manage_events(self, event: pg.Event):
         if self.selected:
-            if event.type == pg.TEXTINPUT:
+            if event.type == pg.TEXTINPUT and len(self.value) < 20:
                 self.append_digit(event)
             elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
                 self.pop_digit()

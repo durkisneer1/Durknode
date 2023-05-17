@@ -13,7 +13,7 @@ class Node:
 
         self.bar_offset = pg.Vector2(0, 20)
         self.bar_pos = pos - self.bar_offset
-        self.bar_rect = pg.Rect(self.bar_pos, (size[0], self.bar_offset.y))
+        self.bar_rect = pg.Rect(self.bar_pos, (self.size.x, self.bar_offset.y))
 
         self.text = title_font.render(label, True, "snow")
         self.text_offset = pg.Vector2(5, -(self.bar_offset.y - 2.5))
