@@ -1,6 +1,6 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Black Format
 on: [push]
+permissions: read-all|write-all
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
