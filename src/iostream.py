@@ -6,10 +6,8 @@ class InChannel:
         self.value = None
         self.rect = pg.Rect(0, 0, 12, 12)
 
-    def get_value(self) -> any:
-        return self.value
-
     def draw(self, screen):
+        pg.draw.rect(screen, "red", self.rect)
         pg.draw.circle(screen, "snow", self.rect.center, 5)
 
 
@@ -18,8 +16,6 @@ class OutChannel:
         self.value = None
         self.rect = pg.Rect(0, 0, 12, 12)
 
-    def get_value(self) -> any:
-        return self.value
-
     def draw(self, screen):
+        pg.draw.rect(screen, "green", self.rect)
         pg.draw.circle(screen, "snow", self.rect.center, 5)

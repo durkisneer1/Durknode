@@ -1,5 +1,6 @@
 import pygame as pg
 from src.node import Node
+from src.iostream import InChannel, OutChannel
 
 
 class NumberNode(Node):
@@ -11,6 +12,8 @@ class NumberNode(Node):
         self.value = ["0"]
         self.output_text = self.font.render("0", True, "snow")
         self.output_offset = pg.Vector2(10, 10)
+        self.inputs = [InChannel()]
+        self.output = OutChannel()
 
     def render_text(self):
         self.output_text = self.font.render("".join(self.value), True, "snow")
@@ -40,6 +43,20 @@ class NumberNode(Node):
             elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
                 self.pop_digit()
 
+    def update(self, mouse_pos: pg.Vector2):
+        super().update(mouse_pos)
+        self.inputs[0].rect.center = (
+            self.pos.x,
+            self.pos.y + self.node_rect.height / 2,
+        )
+        self.output.rect.center = (
+            self.pos.x + self.node_rect.width,
+            self.pos.y + self.node_rect.height / 2,
+        )
+
     def draw(self, screen: pg.Surface):
         super().draw(screen)
         screen.blit(self.output_text, self.pos + self.output_offset)
+        for channel in self.inputs:
+            channel.draw(screen)
+        self.output.draw(screen)

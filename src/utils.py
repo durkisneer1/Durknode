@@ -1,16 +1,18 @@
 import numpy as np
 
+t = np.linspace(0, 1)
+t = t[:, np.newaxis]
+inverse_t = 1 - t
+inverse_t2 = inverse_t**2
+t2 = t**2
+
 
 def calculate_bezier_points(
     start: tuple,
     control_1: tuple,
     control_2: tuple,
     end: tuple,
-    t: np.ndarray[float],
-    inverse_t: np.ndarray[float],
-    inverse_t2: np.ndarray[float],
-    t2: np.ndarray[float],
-) -> list[list]:
+) -> np.ndarray:
     start = np.array(start)
     control_1 = np.array(control_1)
     control_2 = np.array(control_2)
@@ -22,5 +24,4 @@ def calculate_bezier_points(
         + 3 * control_2 * inverse_t * t2
         + end * t2 * t
     )
-
-    return points.tolist()
+    return points

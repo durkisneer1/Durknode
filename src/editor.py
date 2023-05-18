@@ -13,7 +13,6 @@ class NodeEditor:
         self.dragging_node = None
 
         self.receive_linking = False
-
         self.link_sending_node = None
 
     def manage_events(
@@ -22,15 +21,15 @@ class NodeEditor:
         [node.manage_events(event) for node in self.nodes if node.selected]
 
         if event.type == pg.KEYDOWN:
-            if event.key == pg.K_x:
+            if event.key == pg.K_x:  # Delete selected node
                 self.nodes = [node for node in self.nodes if not node.selected]
             elif keys[pg.K_LSHIFT]:
                 match event.key:
-                    case pg.K_a:
+                    case pg.K_a:  # Add node
                         self.nodes.append(
                             AddNode(mouse_pos, self.title_font, len(self.nodes) + 1)
                         )
-                    case pg.K_n:
+                    case pg.K_n:  # Number node
                         self.nodes.append(
                             NumberNode(
                                 mouse_pos,
@@ -41,7 +40,7 @@ class NodeEditor:
                         )
 
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-            sorted_overlapping_nodes = sorted(
+            sorted_nodes = sorted(
                 [
                     node
                     for node in self.nodes
@@ -50,47 +49,35 @@ class NodeEditor:
                 ],
                 key=lambda node: node.layer,
                 reverse=True,
-            )
+            )  # Sort nodes by layer, so that the topmost node is selected first
 
-            if sorted_overlapping_nodes:
-                selected_node = sorted_overlapping_nodes[0]
-
+            if sorted_nodes:
+                selected_node = sorted_nodes[0]
                 selected_node.set_mouse_offset(event.pos)
-
                 selected_node.dragging = True
                 for node in self.nodes:
                     node.selected = False
                 selected_node.selected = True
 
-                # Put everything that's on top of the selected node one layer down -> the selected ends up on top
-
-                selected_node.layer = self.nodes[-1].layer + 1
-
+                selected_node.layer = self.nodes[-1].layer + 1  # Set layer to topmost
                 index = self.nodes.index(selected_node)
-                for node in self.nodes[index:]:
-                    node.layer = max(1, node.layer - 1)
-
+                for node in self.nodes[index:]:  # Move all nodes above selected node down
+                    node.layer = max(1, node.layer - 1)  # Don't go below layer 1
                 self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
-                for node in sorted_overlapping_nodes:
+                for node in self.nodes:
                     if (
-                        (node.node_rect.left - event.pos[0]) ** 2
-                        + (node.node_rect.centery - event.pos[1]) ** 2
-                        <= node.in_out_radius**2
+                        any([i.rect.collidepoint(event.pos) for i in node.inputs])
                         and self.link_sending_node is not None
                         and node != self.link_sending_node
                     ):
                         self.link_sending_node.output_connection = node
                         node.input_connection = self.link_sending_node
-
                         self.link_sending_node.make_connection = False
                         self.link_sending_node.has_connection = True
 
-                    elif (node.node_rect.right - event.pos[0]) ** 2 + (
-                        node.node_rect.centery - event.pos[1]
-                    ) ** 2 <= node.in_out_radius**2:
+                    elif node.output.rect.collidepoint(event.pos):
                         selected_node.make_connection = True
-
                         self.link_sending_node = selected_node
 
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
