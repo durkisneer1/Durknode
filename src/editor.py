@@ -61,7 +61,9 @@ class NodeEditor:
 
                 selected_node.layer = self.nodes[-1].layer + 1  # Set layer to topmost
                 index = self.nodes.index(selected_node)
-                for node in self.nodes[index:]:  # Move all nodes above selected node down
+                for node in self.nodes[
+                    index:
+                ]:  # Move all nodes above selected node down
                     node.layer = max(1, node.layer - 1)  # Don't go below layer 1
                 self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
