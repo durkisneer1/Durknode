@@ -6,10 +6,7 @@ from src.editor import NodeEditor
 pg.init()
 screen = pg.display.set_mode(WIN_SIZE)
 pg.display.set_caption("Node Editor")
-cat_img = pg.transform.scale(
-    pg.image.load("assets/cat.png").convert(),
-    WIN_SIZE
-)
+cat_img = pg.transform.scale(pg.image.load("assets/cat.png").convert(), WIN_SIZE)
 
 node_body_font = pg.font.SysFont("Calibri", 20, True, False)
 node_title_font = pg.font.SysFont("Calibri", 15, True, False)
@@ -33,7 +30,8 @@ def main() -> None:
                 pg.quit()
                 return
 
-        screen.blit(cat_img, (0, 0))
+        screen.fill((50, 50, 50))
+        # screen.blit(cat_img, (0, 0))
 
         editor.update(mouse_vec)
         editor.draw(screen)

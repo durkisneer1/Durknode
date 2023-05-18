@@ -16,7 +16,9 @@ class NodeEditor:
 
         self.link_sending_node = None
 
-    def manage_events(self, event: pg.Event, mouse_pos: pg.Vector2, keys: pg.key.get_pressed):
+    def manage_events(
+        self, event: pg.Event, mouse_pos: pg.Vector2, keys: pg.key.get_pressed
+    ):
         [node.manage_events(event) for node in self.nodes if node.selected]
 
         if event.type == pg.KEYDOWN:
@@ -30,7 +32,12 @@ class NodeEditor:
                         )
                     case pg.K_n:
                         self.nodes.append(
-                            NumberNode(mouse_pos, self.title_font, self.body_font, len(self.nodes) + 1)
+                            NumberNode(
+                                mouse_pos,
+                                self.title_font,
+                                self.body_font,
+                                len(self.nodes) + 1,
+                            )
                         )
 
         elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -66,21 +73,25 @@ class NodeEditor:
                 self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
                 for node in sorted_overlapping_nodes:
-
-                    if (node.node_rect.left - event.pos[0])**2  + (node.node_rect.centery - event.pos[1])**2 <= node.in_out_radius ** 2 and self.link_sending_node is not None and node != self.link_sending_node:
-
+                    if (
+                        (node.node_rect.left - event.pos[0]) ** 2
+                        + (node.node_rect.centery - event.pos[1]) ** 2
+                        <= node.in_out_radius**2
+                        and self.link_sending_node is not None
+                        and node != self.link_sending_node
+                    ):
                         self.link_sending_node.output_connection = node
                         node.input_connection = self.link_sending_node
 
                         self.link_sending_node.make_connection = False
                         self.link_sending_node.has_connection = True
-                        
-                    elif (node.node_rect.right - event.pos[0])**2  + (node.node_rect.centery - event.pos[1])**2 <= node.in_out_radius ** 2:
 
+                    elif (node.node_rect.right - event.pos[0]) ** 2 + (
+                        node.node_rect.centery - event.pos[1]
+                    ) ** 2 <= node.in_out_radius**2:
                         selected_node.make_connection = True
 
                         self.link_sending_node = selected_node
-
 
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
             for n in self.nodes:
