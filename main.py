@@ -1,4 +1,5 @@
 import pygame as pg
+import numpy as np
 from src.const import *
 from src.editor import NodeEditor
 
@@ -19,13 +20,13 @@ delete_key_text = node_body_font.render("Selected + X: Delete Node", True, "snow
 
 
 def main() -> None:
-    mouse_vec = pg.Vector2()
+    mouse_pos = np.array([0, 0])
     while True:
         keys = pg.key.get_pressed()
-        mouse_vec.xy = pg.mouse.get_pos()
+        mouse_pos[0], mouse_pos[1] = pg.mouse.get_pos()
 
         for event in pg.event.get():
-            editor.manage_events(event, mouse_vec, keys)
+            editor.manage_events(event, mouse_pos, keys)
             if event.type == pg.QUIT:
                 pg.quit()
                 return
@@ -33,7 +34,7 @@ def main() -> None:
         screen.fill((50, 50, 50))
         # screen.blit(cat_img, (0, 0))
 
-        editor.update(mouse_vec)
+        editor.update(mouse_pos)
         editor.draw(screen)
 
         screen.blit(add_key_text, (10, 10))

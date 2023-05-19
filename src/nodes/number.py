@@ -1,4 +1,5 @@
 import pygame as pg
+import numpy as np
 from src.node import Node
 from src.iostream import InChannel, OutChannel
 
@@ -36,14 +37,16 @@ class NumberNode(Node):
             self.value.append("0")
         self.render_text()
 
-    def manage_events(self, event: pg.Event):
-        if self.selected:
-            if event.type == pg.TEXTINPUT and len(self.value) < 20:
-                self.append_digit(event)
-            elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
-                self.pop_digit()
+    def manage_events(self, event: pg.Event) -> None:
+        if not self.selected:
+            return
 
-    def update(self, mouse_pos: pg.Vector2):
+        if event.type == pg.TEXTINPUT and len(self.value) < 20:
+            self.append_digit(event)
+        elif event.type == pg.KEYDOWN and event.key == pg.K_BACKSPACE:
+            self.pop_digit()
+
+    def update(self, mouse_pos: np.array):
         super().update(mouse_pos)
         self.inputs[0].rect.center = (
             self.pos.x,

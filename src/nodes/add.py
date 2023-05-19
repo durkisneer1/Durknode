@@ -1,6 +1,8 @@
 import pygame as pg
+import numpy as np
 from src.node import Node
 from src.iostream import InChannel, OutChannel
+from src.utils import calculate_bezier_points
 
 
 class AddNode(Node):
@@ -9,20 +11,25 @@ class AddNode(Node):
         self.inputs = [InChannel(), InChannel()]
         self.output = OutChannel()
 
-    def update(self, mouse_pos: pg.Vector2):
+    def update(self, mouse_pos: np.array) -> None:
         super().update(mouse_pos)
-        self.inputs[0].rect.center = (
-            self.pos.x,
-            self.pos.y + self.node_rect.height * 1 / 3,
+        self.inputs[0].update(self.pos.x, self.pos.y + self.node_rect.height * 1 / 3)
+        self.inputs[1].update(self.pos.x, self.pos.y + self.node_rect.height * 2 / 3)
+        self.output.update(
+            self.pos.x + self.node_rect.width, self.pos.y + self.node_rect.height / 2
         )
-        self.inputs[1].rect.center = (
-            self.pos.x,
-            self.pos.y + self.node_rect.height * 2 / 3,
-        )
-        self.output.rect.center = (
-            self.pos.x + self.node_rect.width,
-            self.pos.y + self.node_rect.height / 2,
-        )
+
+        if self.has_connection:
+            self.wire_points = calculate_bezier_points(
+                self.output.pos, self.output_connection.inputs[0].pos
+            )
+            return
+
+        if self.make_connection and self.selected:
+            if not self.node_rect.collidepoint(mouse_pos):
+                self.wire_points = calculate_bezier_points(self.output.pos, mouse_pos)
+            else:
+                self.wire_points = [self.node_rect.midright, self.node_rect.midright]
 
     def draw(self, screen: pg.Surface):
         super().draw(screen)

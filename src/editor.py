@@ -1,4 +1,5 @@
 import pygame as pg
+import numpy as np
 from src.nodes.add import AddNode
 from src.nodes.number import NumberNode
 
@@ -11,12 +12,13 @@ class NodeEditor:
         self.title_font = title_font
         self.body_font = body_font
         self.dragging_node = None
+        self.spawn_point = pg.Vector2()
 
         self.receive_linking = False
         self.link_sending_node = None
 
     def manage_events(
-        self, event: pg.Event, mouse_pos: pg.Vector2, keys: pg.key.get_pressed
+        self, event: pg.Event, mouse_pos: np.array, keys: pg.key.get_pressed
     ):
         [node.manage_events(event) for node in self.nodes if node.selected]
 
@@ -24,15 +26,18 @@ class NodeEditor:
             if event.key == pg.K_x:  # Delete selected node
                 self.nodes = [node for node in self.nodes if not node.selected]
             elif keys[pg.K_LSHIFT]:
+                self.spawn_point.xy = mouse_pos
                 match event.key:
                     case pg.K_a:  # Add node
                         self.nodes.append(
-                            AddNode(mouse_pos, self.title_font, len(self.nodes) + 1)
+                            AddNode(
+                                self.spawn_point, self.title_font, len(self.nodes) + 1
+                            )
                         )
                     case pg.K_n:  # Number node
                         self.nodes.append(
                             NumberNode(
-                                mouse_pos,
+                                self.spawn_point,
                                 self.title_font,
                                 self.body_font,
                                 len(self.nodes) + 1,
@@ -61,7 +66,9 @@ class NodeEditor:
 
                 selected_node.layer = self.nodes[-1].layer + 1  # Set layer to topmost
                 index = self.nodes.index(selected_node)
-                for node in self.nodes[index:]:  # Move all nodes above selected node down
+                for node in self.nodes[
+                    index:
+                ]:  # Move all nodes above selected node down
                     node.layer = max(1, node.layer - 1)  # Don't go below layer 1
                 self.nodes = sorted(self.nodes, key=lambda node: node.layer)
 
@@ -84,7 +91,7 @@ class NodeEditor:
             for n in self.nodes:
                 n.dragging = False
 
-    def update(self, mouse_pos: pg.Vector2):
+    def update(self, mouse_pos: np.array):
         [node.update(mouse_pos) for node in self.nodes]
 
     def draw(self, screen: pg.Surface):
