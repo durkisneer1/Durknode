@@ -2,6 +2,7 @@ import pygame as pg
 import numpy as np
 from src.node import Node
 from src.iostream import InChannel, OutChannel
+from src.utils import calculate_bezier_points
 
 
 class NumberNode(Node):
@@ -48,14 +49,26 @@ class NumberNode(Node):
 
     def update(self, mouse_pos: np.array):
         super().update(mouse_pos)
-        self.inputs[0].rect.center = (
+        self.inputs[0].update(
             self.pos.x,
             self.pos.y + self.node_rect.height / 2,
         )
-        self.output.rect.center = (
+        self.output.update(
             self.pos.x + self.node_rect.width,
             self.pos.y + self.node_rect.height / 2,
         )
+
+        if self.has_connection:
+            self.wire_points = calculate_bezier_points(
+                self.output.pos, self.output_connection.inputs[0].pos
+            )
+            return
+
+        if self.make_connection and self.selected:
+            if not self.node_rect.collidepoint(mouse_pos):
+                self.wire_points = calculate_bezier_points(self.output.pos, mouse_pos)
+            else:
+                self.wire_points = [self.node_rect.midright, self.node_rect.midright]
 
     def draw(self, screen: pg.Surface):
         super().draw(screen)
