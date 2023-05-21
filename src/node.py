@@ -1,7 +1,6 @@
 import pygame as pg
 import numpy as np
 from src.const import *
-from src.utils import calculate_bezier_points
 
 
 class Node:

@@ -26,10 +26,7 @@ class AddNode(Node):
             return
 
         if self.make_connection and self.selected:
-            if not self.node_rect.collidepoint(mouse_pos):
-                self.wire_points = calculate_bezier_points(self.output.pos, mouse_pos)
-            else:
-                self.wire_points = [self.node_rect.midright, self.node_rect.midright]
+            self.wire_points = calculate_bezier_points(self.output.pos, mouse_pos)
 
     def draw(self, screen: pg.Surface):
         super().draw(screen)
